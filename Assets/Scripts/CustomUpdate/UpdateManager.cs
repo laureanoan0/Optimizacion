@@ -9,11 +9,12 @@ public class UpdateManager : MonoBehaviour
     private static UpdateManager instance;
     public static UpdateManager Instance => instance;
 
-    private readonly List<IUpdatable> updatablesList = new List<IUpdatable>();
+    private readonly List<IUpdateable> updatablesList = new List<IUpdateable>();
 
     private void Awake()
     {
-        if(instance == null)
+        #region Singleton
+        if (instance == null)
         {
             instance = this;
         }
@@ -21,9 +22,10 @@ public class UpdateManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        #endregion
     }
 
-    public void Register(IUpdatable updatable)
+    public void Register(IUpdateable updatable)
     {
         if (!updatablesList.Contains(updatable))
         { 
@@ -31,7 +33,7 @@ public class UpdateManager : MonoBehaviour
         }
     }
 
-    public void Unregister(IUpdatable updatable)
+    public void Unregister(IUpdateable updatable)
     {
         updatablesList.Remove(updatable);
     }

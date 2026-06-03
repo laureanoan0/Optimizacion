@@ -9,7 +9,9 @@ public class UpdateManager : MonoBehaviour
     private static UpdateManager instance;
     public static UpdateManager Instance => instance;
 
-    private readonly List<IUpdateable> updatablesList = new List<IUpdateable>();
+    private readonly List<IUpdateable> updateablesList = new List<IUpdateable>();
+    private readonly List<IFixedUpdateables> fixedUpdateablesList = new List<IFixedUpdateables>();
+
 
     private void Awake()
     {
@@ -27,24 +29,45 @@ public class UpdateManager : MonoBehaviour
 
     public void Register(IUpdateable updatable)
     {
-        if (!updatablesList.Contains(updatable))
-        { 
-            updatablesList.Add(updatable); 
+        if (!updateablesList.Contains(updatable))
+        {
+            updateablesList.Add(updatable);
         }
     }
 
     public void Unregister(IUpdateable updatable)
     {
-        updatablesList.Remove(updatable);
+        updateablesList.Remove(updatable);
+    }
+
+    public void Register(IFixedUpdateables fUpdateable)
+    {
+        if (!fixedUpdateablesList.Contains(fUpdateable))
+        {
+            fixedUpdateablesList.Add(fUpdateable);
+        }
+    }
+
+    public void Unregister(IFixedUpdateables fUpdatable)
+    {
+        fixedUpdateablesList.Remove(fUpdatable);
     }
 
     void Update()
     {
         float deltaTime = Time.deltaTime;
 
-        foreach(var updatable in updatablesList)
+        foreach (var updatable in updateablesList)
         {
             updatable.CustomUpdate(deltaTime);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        foreach (var updatable in fixedUpdateablesList)
+        {
+            updatable.CustomFixedUpdate();
         }
     }
 }

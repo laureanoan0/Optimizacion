@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum EntityType { Enemy, Player, Camera}
 
-public class Entity : MonoBehaviour
+public class Entity : MonoBehaviour/*, IStarteable*/
 {
     [SerializeField] private EntityType type;
     [SerializeField] private PlayerStatsSO stats;
@@ -12,17 +12,28 @@ public class Entity : MonoBehaviour
     [SerializeField] private Transform playerPos;
 
     private Rigidbody rb;
-
     private IEntityBehavior behavior;
+
+   // public void Awake()
+   // {
+   //     UpdateManager.Instance.Register(this);
+   // }
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
-        behavior = BehaviorFactory.CreateEntityBehavior(type, orientation, transform, playerPos, rb, stats);
+        behavior = BehaviorFactory.CreateEntityBehavior(type, orientation, transform, playerPos, rb, stats, this);
     }
+
+    // public void CustomStart()
+    // {
+    //     rb = GetComponent<Rigidbody>();
+    //     behavior = BehaviorFactory.CreateEntityBehavior(type, orientation, transform, playerPos, rb, stats, this);
+    // }
 
     private void OnDestroy()
     {
+        //UpdateManager.Instance.Unregister(this);
         behavior.Destroy();
     }
 }

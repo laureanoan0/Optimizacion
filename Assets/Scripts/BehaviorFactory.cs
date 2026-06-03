@@ -8,13 +8,13 @@ using UnityEngine;
 
 public class BehaviorFactory
 {
-    public static IEntityBehavior CreateEntityBehavior(EntityType type, Transform orientation, Transform transform, Transform playerT, Rigidbody rb, PlayerStatsSO stats)
+    public static IEntityBehavior CreateEntityBehavior(EntityType type, Transform orientation, Transform transform, Transform playerT, Rigidbody rb, PlayerStatsSO stats, Entity entityRef)
     {
         switch (type)
         {
             case EntityType.Camera: return new CameraBehavior(orientation, transform, playerT);
             case EntityType.Player: return new PlayerBehavior(orientation, transform, rb, stats);
-            case EntityType.Enemy: return new CameraBehavior(orientation, transform, playerT);
+            case EntityType.Enemy: return new EnemyMeleBehavior(entityRef, playerT);
             default: return null;
         }
     }

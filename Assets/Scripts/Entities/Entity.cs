@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum EntityType { Enemy, Player, Camera}
 
-public class Entity : MonoBehaviour/*, IStarteable*/
+public class Entity : MonoBehaviour, IStarteable
 {
     [SerializeField] private EntityType type;
     [SerializeField] private PlayerStatsSO stats;
@@ -14,26 +12,20 @@ public class Entity : MonoBehaviour/*, IStarteable*/
     private Rigidbody rb;
     private IEntityBehavior behavior;
 
-   // public void Awake()
-   // {
-   //     UpdateManager.Instance.Register(this);
-   // }
+    public void Awake()
+    {
+        UpdateManager.Instance.Register(this);
+    }
 
-    private void Start()
+    public void CustomStart()
     {
         rb = GetComponent<Rigidbody>();
         behavior = BehaviorFactory.CreateEntityBehavior(type, orientation, transform, playerPos, rb, stats, this);
     }
 
-    // public void CustomStart()
-    // {
-    //     rb = GetComponent<Rigidbody>();
-    //     behavior = BehaviorFactory.CreateEntityBehavior(type, orientation, transform, playerPos, rb, stats, this);
-    // }
-
     private void OnDestroy()
     {
-        //UpdateManager.Instance.Unregister(this);
+        UpdateManager.Instance.Unregister(this);
         behavior.Destroy();
     }
 }

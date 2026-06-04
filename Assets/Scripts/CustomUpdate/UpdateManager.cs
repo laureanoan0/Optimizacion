@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditorInternal;
 using UnityEngine;
 
+[DefaultExecutionOrder(-100)]
 public class UpdateManager : MonoBehaviour
 {
     private static UpdateManager instance;

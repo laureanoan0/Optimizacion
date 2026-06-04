@@ -1,11 +1,9 @@
-﻿using JetBrains.Annotations;
-using System.Runtime.CompilerServices;
-using UnityEngine;
+﻿using UnityEngine;
 public class EnemySteeringBehavior
 {
     public static Vector3 Seek(Transform user, Transform objective)
     {
-        Vector3 dist = user.position - objective.position;
-        return dist;
+        Vector3 direction = (user.position - objective.position).normalized;
+        return direction;
     }
 }

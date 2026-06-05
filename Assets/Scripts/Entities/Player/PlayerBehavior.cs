@@ -61,9 +61,10 @@ public class PlayerBehavior: IEntityBehavior, IUpdateable, IFixedUpdateables
         {
             jumpTimer -= time;
         }
+        else canJump = true;
 
-        HandleInput();
-
+            HandleInput();
+        Debug.Log(jumpTimer);
         
     }
 
@@ -94,9 +95,6 @@ public class PlayerBehavior: IEntityBehavior, IUpdateable, IFixedUpdateables
     private void ResetJump(float time)
     {
         jumpTimer = time;
-
-        if (jumpTimer <= 0f)
-            canJump = true;
     }
 
     private void MovePlayer()

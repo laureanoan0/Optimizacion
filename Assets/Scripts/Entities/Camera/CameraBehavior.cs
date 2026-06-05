@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-public class CameraBehavior: IEntityBehavior, IUpdateable
+public class CameraBehavior: IUpdateable
 {
     private float sensX = 400;
     private float sensY = 400;
@@ -15,13 +15,13 @@ public class CameraBehavior: IEntityBehavior, IUpdateable
     private float yRotation;
 
 
-    public CameraBehavior(Transform orientation, Transform transform, Transform playerTransform)
+    public CameraBehavior(Transform playerTransform, Transform cameraPos)
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        this.transform = transform;
-        this.orientation = orientation;
+        this.transform = cameraPos;
+        this.orientation = cameraPos;
         this.playerTransform = playerTransform;
 
         UpdateManager.Instance.Register(this);
@@ -38,7 +38,6 @@ public class CameraBehavior: IEntityBehavior, IUpdateable
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        orientation.rotation = Quaternion.Euler(0, yRotation, 0);
         transform.position = playerTransform.position;
     }
 
@@ -46,6 +45,5 @@ public class CameraBehavior: IEntityBehavior, IUpdateable
     {
         UpdateManager.Instance.Unregister(this);
     }
-
 }
 

@@ -1,14 +1,17 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class EnemyMeleBehavior : IEntityBehavior, IUpdateable, IFixedUpdateables
+public class EnemyBehavior : IUpdateable, IFixedUpdateables
 {
     private Transform transform;
     private Transform target;
     private float speed = 10f;
-    public EnemyMeleBehavior(Entity entity, Transform playerPos)
+    public EnemyBehavior(Object entity, Transform playerPos, EnemySO scriptableObject)
     {
-        transform = entity.transform;
+        transform = entity.GameObject().transform;
         target = playerPos;
+        speed = scriptableObject.speed;
+
         UpdateManager.Instance.Register((IUpdateable)this);
         UpdateManager.Instance.Register((IFixedUpdateables)this);
     }
@@ -25,11 +28,6 @@ public class EnemyMeleBehavior : IEntityBehavior, IUpdateable, IFixedUpdateables
     public void CustomUpdate(float time)
     {
         transform.position += EnemySteeringBehavior.Seek(transform, target) * time * speed;
-    }
-
-    public void Attack()
-    {
-
     }
 
     public void OnDeath()

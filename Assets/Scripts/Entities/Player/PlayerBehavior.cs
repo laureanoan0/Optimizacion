@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class PlayerBehavior: IEntityBehavior, IUpdateable, IFixedUpdateables
+public class PlayerBehavior: IUpdateable, IFixedUpdateables
 {
     private float moveSpeed;
     private float groundDrag;
@@ -11,6 +11,7 @@ public class PlayerBehavior: IEntityBehavior, IUpdateable, IFixedUpdateables
     private Transform orientation;
     private Transform transform;
 
+    private CameraBehavior camera;
    
     private float playerHeight;
     private LayerMask groundLayer;
@@ -39,6 +40,8 @@ public class PlayerBehavior: IEntityBehavior, IUpdateable, IFixedUpdateables
         playerHeight = stats.playerHeight;
         groundLayer = stats.groundLayer;
 
+        camera = new CameraBehavior(transform, orientation);
+
         UpdateManager.Instance.Register((IUpdateable)this);
         UpdateManager.Instance.Register((IFixedUpdateables)this);
     }
@@ -63,9 +66,7 @@ public class PlayerBehavior: IEntityBehavior, IUpdateable, IFixedUpdateables
         }
         else canJump = true;
 
-            HandleInput();
-        Debug.Log(jumpTimer);
-        
+        HandleInput();
     }
 
     public void CustomFixedUpdate()

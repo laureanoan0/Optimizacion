@@ -9,15 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7a35a9817a2bb643aea85055945a0a1, type: 3}
-  m_Name: EnemyMeleStats
+  m_Script: {fileID: 11500000, guid: c3b4795b8751c39409fc36787587c4a0, type: 3}
+  m_Name: EnemyTest
   m_EditorClassIdentifier: 
-  moveSpeed: 1
-  groundDrag: 1
-  jumpForce: 100
-  jumpCd: 1
-  airMult: 1
-  playerHeight: 100
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
+  prefab: {fileID: 6028170393952986060, guid: a9914cf646305e44fb83e1d115733b77, type: 3}
+  speed: 1

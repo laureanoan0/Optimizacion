@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public static class ServiceLocator
 {
@@ -15,6 +16,7 @@ public static class ServiceLocator
             return;
         }
         services.Add(type, service);
+        Debug.Log("Recibi un servicio del tipo: " + type);
     }
 
     public static T Get<T>()

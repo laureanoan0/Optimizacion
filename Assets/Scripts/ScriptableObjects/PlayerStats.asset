@@ -21,3 +21,6 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
+  entityLayer:
+    serializedVersion: 2
+    m_Bits: 16

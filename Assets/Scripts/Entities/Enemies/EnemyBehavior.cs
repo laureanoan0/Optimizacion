@@ -1,11 +1,16 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class EnemyBehavior : IUpdateable, IFixedUpdateables
+public class EnemyBehavior : IUpdateable, IFixedUpdateables, IEnemyBehavior
 {
     private Transform transform;
     private Transform target;
     private float speed = 10f;
+
+    private int difficulty = 1;
+
+    public int Difficulty => difficulty;
+
     public EnemyBehavior(Object entity, Transform playerPos, EnemySO scriptableObject)
     {
         transform = entity.GameObject().transform;
@@ -25,6 +30,10 @@ public class EnemyBehavior : IUpdateable, IFixedUpdateables
 
     }
 
+    public void TakeDamage()
+    {
+        Debug.Log("Holaaaaaaaaa");
+    }
     public void CustomUpdate(float time)
     {
         transform.position += EnemySteeringBehavior.Seek(transform, target) * time * speed;

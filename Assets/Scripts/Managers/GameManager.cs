@@ -13,20 +13,21 @@ public class GameManager : MonoBehaviour
 
     private EntityManager enemyManager;
 
-    public Action ServicesRegistration => () =>
-    {
-        enemyManager = new EntityManager(enemySO, playerSO);
-        ServiceLocator.Register(enemyManager.enemies);
-    };
 
     private void Awake()
     {
-        ServicesRegistration?.Invoke();
+        ServicesRegistration();
     }
-
-    public static UnityEngine.Object CreateEnemy(UnityEngine.Object enemy)
+    public void ServicesRegistration()
     {
-        return Instantiate(enemy);
+        enemyManager = new EntityManager(enemySO, playerSO);
+        Debug.Log("Registre desde game manager");
+        ServiceLocator.Register(enemyManager.enemies);
+
+    }
+    public static UnityEngine.Object CreateObject(UnityEngine.Object enemy, Vector3 position)
+    {
+        return Instantiate(enemy, position, new Quaternion(0,0,0,0));
     }
 
     public static (UnityEngine.Object, UnityEngine.Object) CreatePlayer(UnityEngine.Object player, UnityEngine.Object orientation)

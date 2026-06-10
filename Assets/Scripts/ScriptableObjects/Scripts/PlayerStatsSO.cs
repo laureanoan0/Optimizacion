@@ -11,5 +11,6 @@ public class PlayerStatsSO: ScriptableObject
     public float airMult;
     public float playerHeight;
     public LayerMask groundLayer;
+    public LayerMask entityLayer;
 }
 

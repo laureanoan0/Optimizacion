@@ -1,21 +1,21 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class EnemyBehavior : IUpdateable, IFixedUpdateables, IEnemyBehavior
+public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables 
 {
     private Transform transform;
     private Transform target;
     private float speed = 10f;
-
+    private EnemyTypes enemyType = EnemyTypes.melee;
     private int difficulty = 1;
 
     public int Difficulty => difficulty;
+    public EnemyTypes Type => enemyType;
 
-    public EnemyBehavior(Object entity, Transform playerPos, EnemySO scriptableObject)
+    public BasicEnemyBehavior(Object entity, Transform playerPos)
     {
         transform = entity.GameObject().transform;
         target = playerPos;
-        speed = scriptableObject.speed;
 
         UpdateManager.Instance.Register((IUpdateable)this);
         UpdateManager.Instance.Register((IFixedUpdateables)this);

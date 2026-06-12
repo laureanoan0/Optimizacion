@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b30eee9e99f64db46ad040ceb38f802d, type: 3}
+  m_Name: EnemySpawners
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 7411345553050009484, guid: a66bf712a4feeed4b871607b8ebf1ec4, type: 3}
+  position:
+  - {x: -50, y: 0, z: -50}
+  - {x: 50, y: 0, z: 50}
+  - {x: -50, y: 0, z: 50}
+  - {x: 50, y: 0, z: -50}
+  enemies:
+  - {fileID: 11400000, guid: 94a793ab25c2d1e48829fe3eb641d279, type: 2}

@@ -3,29 +3,39 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+public enum EnemyTypes { melee, ranged }
 public class EntityManager
 {
-    public Dictionary<UnityEngine.Object, IEnemyBehavior> enemies;
     private (Object, PlayerBehavior) player;
 
-    public EntityManager(EnemySO enemySo, PlayerSO playerSO)
+    public EntityManager(EnemySpawnersSO spawnersSo, PlayerSO playerSO)
     {
-        enemies = new Dictionary<UnityEngine.Object, IEnemyBehavior>();
-        SpawnPlayer(playerSO, playerSO.statsSO);
-        //SpawnEnemySpawners(enemySo, player.Item1.GameObject().transform);
+        Boot(spawnersSo, playerSO, playerSO.statsSO);
     }
 
+    private void Boot(EnemySpawnersSO spawnerSo, PlayerSO playerSo, PlayerStatsSO stats)
+    {
+        SpawnEnemySpawners(spawnerSo, SpawnPlayer(playerSo, stats));
+    }
     private void SpawnEnemySpawners(EnemySpawnersSO spawnerSo, Transform target)
     {
-        UnityEngine.Object spawnerObj = GameManager.CreateObject(spawnerSo.prefab, spawnerSo.position);
+        int index = 0;
+        while (index <= 3)
+        {
+            UnityEngine.Object spawnerObj = GameManager.CreateObject(spawnerSo.prefab, spawnerSo.position[index]);
+            EnemySpawner spawnerBrain = new EnemySpawner(spawnerObj.GameObject().transform, spawnerSo.enemies, target);
+            index++;
+        }
     }
 
-    private void SpawnPlayer(PlayerSO playerSo, PlayerStatsSO stats)
+    private Transform SpawnPlayer(PlayerSO playerSo, PlayerStatsSO stats)
     {
         (Object, Object) playerObj = GameManager.CreatePlayer(playerSo.prefab, playerSo.empty);
         PlayerBehavior playerBehavior = new PlayerBehavior(playerObj.Item2.GameObject().transform, playerObj.Item1.GameObject().transform, playerObj.Item1.GameObject().GetComponent<Rigidbody>(), stats, stats.entityLayer);
         player.Item1 = playerObj.Item1;
         player.Item2 = playerBehavior;
+
+        return playerObj.Item1.GameObject().transform;
     }
 }
 

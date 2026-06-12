@@ -4,6 +4,7 @@
 public class EnemySpawnersSO : ScriptableObject
 {
     public GameObject prefab;
-    public Vector3 position;
+    public Vector3[] position;
+    public EnemySO[] enemies;
 }
 

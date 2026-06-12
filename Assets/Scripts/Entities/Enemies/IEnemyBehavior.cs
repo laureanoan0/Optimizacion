@@ -1,6 +1,10 @@
-﻿public interface IEnemyBehavior
+﻿using UnityEngine;
+using System;
+
+public interface IEnemyBehavior
 {
-    public int Difficulty { get;}
+    public int Difficulty { get; }
+    public EnemyTypes Type { get; }
     public void TakeDamage();
 }
 

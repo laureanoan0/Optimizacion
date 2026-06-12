@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 public class EnemySpawner
 {
@@ -7,12 +8,19 @@ public class EnemySpawner
     private Transform target;
     private int waveDifficulty;
 
+    private Dictionary<UnityEngine.Object, IEnemyBehavior> enemies;
+    public Dictionary<UnityEngine.Object, IEnemyBehavior> Enemies => enemies;
+
     public EnemySpawner(Transform transform, EnemySO[] enemySo, Transform target)
     {
+        enemies = new Dictionary<UnityEngine.Object, IEnemyBehavior>();
+
         this.transform = transform;
-        enemiesArray = enemySo;
         this.target = target;
+        enemiesArray = enemySo;
         waveDifficulty = 10;
+
+        ServiceLocator.Register(enemies);
 
         SpawnWave();
     }
@@ -21,8 +29,10 @@ public class EnemySpawner
     {
         while (waveDifficulty > 0) 
         {
-            var enemy = GameManager.CreateObject(enemiesArray[Random.Range(0, enemiesArray.Length)].prefab, transform.position);
-            ServiceLocator.Get<Dictionary<UnityEngine.Object, IEnemyBehavior>>().TryGetValue(enemy, out var enemyRef);
+            EnemySO enemyRand = enemiesArray[Random.Range(0, enemiesArray.Length)];
+            var enemy = GameManager.CreateObject(enemyRand.prefab, transform.position);
+            var enemyRef = EnemyFactory.CreateEnemy(enemyRand.type, enemy, target);
+            enemies.Add(enemy, enemyRef);
             waveDifficulty -= enemyRef.Difficulty; 
         }
     }

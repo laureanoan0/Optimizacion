@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 public class EnemySpawner : IUpdateable
 {
@@ -6,6 +7,7 @@ public class EnemySpawner : IUpdateable
     private EnemySO[] enemiesArray;
     private Transform target;
     private int waveDifficulty;
+    private List<IEnemyBehavior> pooledEnemies= new List<IEnemyBehavior>();
 
     private Dictionary<UnityEngine.Object, IEnemyBehavior> enemies;
     public Dictionary<UnityEngine.Object, IEnemyBehavior> Enemies => enemies;
@@ -41,6 +43,7 @@ public class EnemySpawner : IUpdateable
     {
         if (waveDifficulty > 0) 
         {
+            //Los enemigos se deben spawnear desactivados y agregar a una lista
             Debug.Log("gen");
             EnemySO enemyRand = enemiesArray[Random.Range(0, enemiesArray.Length)];
             var enemy = GameManager.CreateObject(enemyRand.prefab, transform.position);
@@ -48,6 +51,20 @@ public class EnemySpawner : IUpdateable
             enemies.Add(enemy, enemyRef);
             waveDifficulty -= enemyRef.Difficulty; 
         }
+    }
+
+    public void SendEnemy()
+    {
+        //Tomar un enemigo de la lista de desactivados, setear sus variables en valores originales y activarlo
+        //Si no quedan enemigos disponibles generar otro
+    }
+
+    public void RecycleEnemy(UnityEngine.Object enemy)
+    {
+        //Devolver enemigo a la lista de desactivados
+        enemies[enemy].Reset();
+        pooledEnemies.Add(enemies[enemy]);
+        enemy.GameObject().SetActive(false);
     }
 }
 

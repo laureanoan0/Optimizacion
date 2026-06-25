@@ -5,7 +5,8 @@ public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
 {
     private Transform transform;
     private Transform target;
-    private float speed = 10f;
+    private Vector3 originalPosition;
+    private float speed;
     private EnemyTypes enemyType = EnemyTypes.melee;
     private int difficulty = 1;
 
@@ -15,6 +16,7 @@ public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
     public BasicEnemyBehavior(Object entity, Transform playerPos, EnemySO data)
     {
         transform = entity.GameObject().transform;
+        originalPosition = transform.position;
         target = playerPos;
         speed = data.speed;
 
@@ -33,7 +35,8 @@ public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
 
     public void TakeDamage()
     {
-        Debug.Log("Holaaaaaaaaa");
+        
+        OnDeath();
     }
     public void CustomUpdate(float time)
     {
@@ -50,5 +53,11 @@ public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
     public void OnDeath()
     {
         Destroy();
+    }
+
+    public void Reset()
+    {
+
+        transform.position = originalPosition;
     }
 }

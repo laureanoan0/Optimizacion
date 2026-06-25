@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerSO playerSO;
     [SerializeField] private Transform playerTransform;
     [SerializeField] private Transform orientation;
-    [SerializeField] private Rigidbody rb;
 
     private EntityManager entityManager;
 

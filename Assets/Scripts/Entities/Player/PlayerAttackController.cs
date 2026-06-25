@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAttackController
+public class PlayerAttackController: IUpdateable
 {
     private Transform playerTransform;
     private LayerMask entityLayer;
@@ -10,10 +10,18 @@ public class PlayerAttackController
     {
         this.playerTransform = playerTransform;
         this.entityLayer = entityLayer;
+
+        UpdateManager.Instance.Register(this);
     }
 
-    public void Update()
+    public void Destroy()
     {
+        UpdateManager.Instance.Unregister(this);
+    }
+
+    public void CustomUpdate(float time)
+    {
+        Debug.DrawRay(playerTransform.position, playerTransform.forward * 1000f);
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;

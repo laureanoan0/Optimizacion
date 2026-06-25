@@ -30,7 +30,7 @@ public class PlayerBehavior: IUpdateable, IFixedUpdateables
     public void CustomUpdate(float time)
     {
         movementCon.CustomUpdate(time);
-        attackCon.Update();
+        attackCon.CustomUpdate(time);
     }
 
     public void CustomFixedUpdate()

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 public class EnemySpawner : IUpdateable
 {
@@ -17,17 +16,16 @@ public class EnemySpawner : IUpdateable
 
     public EnemySpawner(Transform transform, EnemySO[] enemySo, Transform target, float timer)
     {
-        enemies = new Dictionary<UnityEngine.Object, IEnemyBehavior>();
+        enemies = ServiceLocator.Get<Dictionary<UnityEngine.Object, IEnemyBehavior>>();
         this.timer = timer;
         timerBase = timer;
 
         this.transform = transform;
         this.target = target;
         enemiesArray = enemySo;
-        waveDifficulty = 10;
+        waveDifficulty = 1;
 
         UpdateManager.Instance.Register(this);
-        ServiceLocator.Register(enemies);
     }
     public void CustomUpdate(float time)
     {

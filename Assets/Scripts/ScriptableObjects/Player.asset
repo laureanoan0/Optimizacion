@@ -15,3 +15,4 @@ MonoBehaviour:
   prefab: {fileID: 8619555948991762528, guid: fc45222446b1b4449ba7b396ab625537, type: 3}
   empty: {fileID: 7934213109047976072, guid: 54010b0fd73dd2d45b4d1c35bbdc8968, type: 3}
   statsSO: {fileID: 11400000, guid: 6d98cd6a689aa944e90c7b347bae77b1, type: 2}
+  playerRb: {fileID: 8901322128101037840, guid: fc45222446b1b4449ba7b396ab625537, type: 3}

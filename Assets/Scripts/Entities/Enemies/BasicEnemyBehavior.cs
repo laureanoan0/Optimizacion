@@ -37,7 +37,12 @@ public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
     }
     public void CustomUpdate(float time)
     {
-        Vector3 direct = EnemySteeringBehavior.Seek(transform, target) * time * speed;
+        Vector3 direction = EnemySteeringBehavior.Seek(transform, target).Item1;
+        bool kill = EnemySteeringBehavior.Seek(transform, target).Item2;
+
+        Vector3 direct = direction * time * speed;
+        if (kill) GameManager.LoadGameplayScene();
+
         transform.position += direct;
         transform.rotation = Quaternion.LookRotation(direct);
     }

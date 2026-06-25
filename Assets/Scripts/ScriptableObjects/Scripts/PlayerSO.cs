@@ -6,5 +6,6 @@ public class PlayerSO : ScriptableObject
     public GameObject prefab;
     public GameObject empty;
     public PlayerStatsSO statsSO;
+    public Rigidbody playerRb;
 }
 

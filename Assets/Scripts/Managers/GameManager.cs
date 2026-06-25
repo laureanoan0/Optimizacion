@@ -2,6 +2,7 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -29,11 +30,16 @@ public class GameManager : MonoBehaviour
         return Instantiate(enemy, position, new Quaternion(0,0,0,0));
     }
 
-    public static (UnityEngine.Object, UnityEngine.Object) CreatePlayer(UnityEngine.Object player, UnityEngine.Object orientation)
+    public static (Rigidbody, UnityEngine.Object) CreatePlayer(Rigidbody rbPrefab, UnityEngine.Object orientation)
     {
-        UnityEngine.Object playerO = Instantiate(player);
-        UnityEngine.Object empty = Instantiate(orientation, playerO.GameObject().transform);
-        return (playerO, empty);
+        Rigidbody rbInstance = Instantiate(rbPrefab);
+        UnityEngine.Object empty = Instantiate(orientation, rbInstance.transform);
+        return (rbInstance, empty);
+    }
+
+    public static void LoadGameplayScene()
+    {
+        SceneManager.LoadScene("SampleScene");
     }
 }
 

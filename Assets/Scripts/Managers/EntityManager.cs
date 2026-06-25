@@ -23,7 +23,7 @@ public class EntityManager
         while (index <= 3)
         {
             UnityEngine.Object spawnerObj = GameManager.CreateObject(spawnerSo.prefab, spawnerSo.position[index]);
-            EnemySpawner spawnerBrain = new EnemySpawner(spawnerObj.GameObject().transform, spawnerSo.enemies, target);
+            EnemySpawner spawnerBrain = new EnemySpawner(spawnerObj.GameObject().transform, spawnerSo.enemies, target, spawnerSo.timer);
             index++;
         }
     }

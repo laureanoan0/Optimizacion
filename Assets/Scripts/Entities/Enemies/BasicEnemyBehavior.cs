@@ -12,10 +12,11 @@ public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
     public int Difficulty => difficulty;
     public EnemyTypes Type => enemyType;
 
-    public BasicEnemyBehavior(Object entity, Transform playerPos)
+    public BasicEnemyBehavior(Object entity, Transform playerPos, EnemySO data)
     {
         transform = entity.GameObject().transform;
         target = playerPos;
+        speed = data.speed;
 
         UpdateManager.Instance.Register((IUpdateable)this);
         UpdateManager.Instance.Register((IFixedUpdateables)this);
@@ -36,7 +37,9 @@ public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
     }
     public void CustomUpdate(float time)
     {
-        transform.position += EnemySteeringBehavior.Seek(transform, target) * time * speed;
+        Vector3 direct = EnemySteeringBehavior.Seek(transform, target) * time * speed;
+        transform.position += direct;
+        transform.rotation = Quaternion.LookRotation(direct);
     }
 
     public void OnDeath()

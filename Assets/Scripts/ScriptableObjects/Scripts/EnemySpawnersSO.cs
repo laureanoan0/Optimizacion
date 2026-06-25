@@ -6,5 +6,6 @@ public class EnemySpawnersSO : ScriptableObject
     public GameObject prefab;
     public Vector3[] position;
     public EnemySO[] enemies;
+    public float timer;
 }
 

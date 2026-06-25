@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 7411345553050009484, guid: a66bf712a4feeed4b871607b8ebf1ec4, type: 3}
   position:
-  - {x: -50, y: 0, z: -50}
-  - {x: 50, y: 0, z: 50}
-  - {x: -50, y: 0, z: 50}
-  - {x: 50, y: 0, z: -50}
+  - {x: -50, y: 10, z: -50}
+  - {x: 50, y: 10, z: 50}
+  - {x: -50, y: 10, z: 50}
+  - {x: 50, y: 10, z: -50}
   enemies:
   - {fileID: 11400000, guid: 94a793ab25c2d1e48829fe3eb641d279, type: 2}
+  timer: 3

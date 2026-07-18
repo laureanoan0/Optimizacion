@@ -1,70 +1,93 @@
 ﻿using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-public class EnemySpawner : IUpdateable
+using UnityEngine.Pool;
+
+public class EnemySpawner
 {
+    private const int PREWARM_COUNT = 5;
     private Transform transform;
     private EnemySO[] enemiesArray;
     private Transform target;
-    private int waveDifficulty;
-    private List<IEnemyBehavior> pooledEnemies= new List<IEnemyBehavior>();
-
+    private Dictionary<EnemySO, ObjectPool<IEnemyBehavior>> pools = new Dictionary<EnemySO, ObjectPool<IEnemyBehavior>>();
     private Dictionary<UnityEngine.Object, IEnemyBehavior> enemies;
     public Dictionary<UnityEngine.Object, IEnemyBehavior> Enemies => enemies;
+    public bool HasEnemyTypes => enemiesArray.Length > 0;
 
-    float timer;
-    float timerBase;
-
-
-    public EnemySpawner(Transform transform, EnemySO[] enemySo, Transform target, float timer)
+    public EnemySpawner(Transform transform, EnemySO[] enemySo, Transform target)
     {
         enemies = ServiceLocator.Get<Dictionary<UnityEngine.Object, IEnemyBehavior>>();
-        this.timer = timer;
-        timerBase = timer;
 
         this.transform = transform;
         this.target = target;
-        enemiesArray = enemySo;
-        waveDifficulty = 1;
 
-        UpdateManager.Instance.Register(this);
-    }
-    public void CustomUpdate(float time)
-    {
-        timer -= time;
-        if (timer <= 0)
+        var implemented = new List<EnemySO>();
+        foreach (var so in enemySo)
         {
-            SpawnWave();
-            timer = timerBase;
+            if (EnemyFactory.IsImplemented(so.type))
+            {
+                implemented.Add(so);
+            }
+            else
+            {
+                Debug.LogWarning($"EnemySpawner: el tipo '{so.type}' ({so.name}) todavía no tiene comportamiento implementado, se omite del spawn.");
+            }
+        }
+        enemiesArray = implemented.ToArray();
+
+        foreach (var enemySOItem in enemiesArray)
+        {
+            if (!pools.ContainsKey(enemySOItem))
+            {
+                pools.Add(enemySOItem, CreatePool(enemySOItem, prewarmCount: PREWARM_COUNT));
+            }
         }
     }
-
-    public void SpawnWave()
+    public void SpawnOne()
     {
-        if (waveDifficulty > 0) 
+        if (enemiesArray.Length == 0) return;
+
+        EnemySO enemyRand = enemiesArray[Random.Range(0, enemiesArray.Length)];
+        pools[enemyRand].Get();
+    }
+
+    private ObjectPool<IEnemyBehavior> CreatePool(EnemySO data, int prewarmCount)
+    {
+        ObjectPool<IEnemyBehavior> pool = null;
+
+        pool = new ObjectPool<IEnemyBehavior>(
+            createFunc: () => CreateEnemyInstance(data, pool),
+            actionOnGet: enemy => enemy.Activate(transform.position),
+            actionOnRelease: enemy => enemy.Deactivate(),
+            actionOnDestroy: enemy => UnityEngine.Object.Destroy(enemy.GameObjectRef.GameObject()),
+            collectionCheck: false,
+            defaultCapacity: prewarmCount,
+            maxSize: 30);
+
+        var warmBatch = new List<IEnemyBehavior>(prewarmCount);
+        for (int i = 0; i < prewarmCount; i++)
         {
-            //Los enemigos se deben spawnear desactivados y agregar a una lista
-            Debug.Log("gen");
-            EnemySO enemyRand = enemiesArray[Random.Range(0, enemiesArray.Length)];
-            var enemy = GameManager.CreateObject(enemyRand.prefab, transform.position);
-            var enemyRef = EnemyFactory.CreateEnemy(enemyRand.type, enemy, target, enemyRand);
-            enemies.Add(enemy, enemyRef);
-            waveDifficulty -= enemyRef.Difficulty; 
+            warmBatch.Add(pool.Get());
         }
-    }
+        foreach (var enemy in warmBatch)
+        {
+            pool.Release(enemy);
+        }
 
-    public void SendEnemy()
-    {
-        //Tomar un enemigo de la lista de desactivados, setear sus variables en valores originales y activarlo
-        //Si no quedan enemigos disponibles generar otro
+        return pool;
     }
-
-    public void RecycleEnemy(UnityEngine.Object enemy)
+    private IEnemyBehavior CreateEnemyInstance(EnemySO data, ObjectPool<IEnemyBehavior> pool)
     {
-        //Devolver enemigo a la lista de desactivados
-        enemies[enemy].Reset();
-        pooledEnemies.Add(enemies[enemy]);
-        enemy.GameObject().SetActive(false);
+        UnityEngine.Object entity = GameManager.CreateObject(data.prefab, transform.position);
+        IEnemyBehavior enemy = EnemyFactory.CreateEnemy(data.type, entity, target, data);
+
+        enemy.OnDeath += behavior =>
+        {
+            behavior.Reset();
+            pool.Release(behavior);
+        };
+
+        enemies[entity] = enemy;
+        return enemy;
     }
 }
-

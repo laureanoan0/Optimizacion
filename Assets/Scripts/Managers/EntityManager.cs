@@ -1,8 +1,6 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-
 public enum EnemyTypes { melee, ranged }
 public class EntityManager
 {
@@ -20,13 +18,19 @@ public class EntityManager
     }
     private void SpawnEnemySpawners(EnemySpawnersSO spawnerSo, Transform target)
     {
+        var spawnPoints = new List<EnemySpawner>();
+
         int index = 0;
         while (index <= 3)
         {
             UnityEngine.Object spawnerObj = GameManager.CreateObject(spawnerSo.prefab, spawnerSo.position[index]);
-            EnemySpawner spawnerBrain = new EnemySpawner(spawnerObj.GameObject().transform, spawnerSo.enemies, target, spawnerSo.timer);
+            EnemySpawner spawnerBrain = new EnemySpawner(spawnerObj.GameObject().transform, spawnerSo.enemies, target);
+            spawnPoints.Add(spawnerBrain);
             index++;
         }
+
+        const float waveInterval = 10f;
+        new WaveManager(spawnPoints, waveInterval, initialWaveSize: 4);
     }
 
     private Transform SpawnPlayer(PlayerSO playerSo, PlayerStatsSO stats)
@@ -39,4 +43,3 @@ public class EntityManager
         return playerObj.Item1.GameObject().transform;
     }
 }
-

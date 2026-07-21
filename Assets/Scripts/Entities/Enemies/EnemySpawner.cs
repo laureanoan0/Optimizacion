@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class EnemySpawner
+public class EnemySpawner //Controla las pools
 {
     private const int PREWARM_COUNT = 5;
     private Transform transform;

@@ -22,7 +22,7 @@ public class EnemyFactory
             case EnemyTypes.melee:
                 enemy = new BasicEnemyBehavior();
                 break;
-            case EnemyTypes.ranged:
+            case EnemyTypes.fast:
                 enemy = null;
                 break;
             default:

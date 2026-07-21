@@ -5,7 +5,9 @@ public class EnemyFactory
 {
     private static readonly HashSet<EnemyTypes> implementedTypes = new HashSet<EnemyTypes>
     {
-        EnemyTypes.melee
+        EnemyTypes.melee,
+        EnemyTypes.fast,
+        EnemyTypes.tank
     };
 
     public static bool IsImplemented(EnemyTypes type)
@@ -23,7 +25,10 @@ public class EnemyFactory
                 enemy = new BasicEnemyBehavior();
                 break;
             case EnemyTypes.fast:
-                enemy = null;
+                enemy = new FastEnemyBehavior();
+                break;
+            case EnemyTypes.tank:
+                enemy = new HeavyEnemyBehavior();
                 break;
             default:
                 enemy = null;

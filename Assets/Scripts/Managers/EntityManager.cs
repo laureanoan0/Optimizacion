@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-public enum EnemyTypes { melee, fast }
+public enum EnemyTypes { melee, fast, tank }
 public class EntityManager
 {
     private (Object, PlayerBehavior) player;

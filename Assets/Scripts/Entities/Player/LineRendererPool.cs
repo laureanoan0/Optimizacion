@@ -4,7 +4,7 @@ using UnityEngine.Pool;
 
 public class LineRendererPool : IUpdateable
 {
-    private class ActiveLine
+    private struct ActiveLine
     {
         public LineRenderer LineRend;
         public Vector3 StartPos;
@@ -42,6 +42,10 @@ public class LineRendererPool : IUpdateable
             {
                 pool.Release(line.LineRend);
                 activeLines.RemoveAt(i);
+            }
+            else
+            {
+                activeLines[i] = line;
             }
         }
     }

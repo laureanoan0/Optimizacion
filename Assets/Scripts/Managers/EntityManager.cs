@@ -15,7 +15,7 @@ public class EntityManager
     {
         ServiceLocator.Register(new Dictionary<UnityEngine.Object, IEnemyBehavior>());
         new ScoreManager();
-        new EnemyDeathVFXManager(enemyDeathParticles);
+        new EnemyDeathVFXManager(enemyDeathParticles, burstCount : 5);
 
         SpawnEnemySpawners(spawnerSo, SpawnPlayer(playerSo, stats));
     }

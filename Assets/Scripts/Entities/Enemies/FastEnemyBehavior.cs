@@ -5,9 +5,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class FastEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
+public class FastEnemyBehavior : IEnemyBehavior, IUpdateable
 {
-    private const float VIEW_HALF_ANGLE = 60f; // medio angulo del cono de vision de la camara
+    private const float VIEW_HALF_ANGLE = 60f;
 
     private UnityEngine.Object entity;
     private Transform transform;
@@ -40,20 +40,15 @@ public class FastEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
         entity.GameObject().SetActive(true);
 
         UpdateManager.Instance.Register((IUpdateable)this);
-        UpdateManager.Instance.Register((IFixedUpdateables)this);
     }
 
     public void Deactivate()
     {
-        UpdateManager.Instance.Unregister((IFixedUpdateables)this);
         UpdateManager.Instance.Unregister((IUpdateable)this);
-
         entity.GameObject().SetActive(false);
     }
-
-    public void CustomFixedUpdate()
+    public void Destroy()
     {
-
     }
 
     public void TakeDamage()
@@ -65,8 +60,7 @@ public class FastEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
     {
         if (IsSeenByPlayer())
         {
-            Debug.Log($"Camara usada: {playerCamera.name}");
-            return; // se queda inmovil mientras el jugador lo tiene en el cono de vision
+            return; 
         }
 
         var (direction, kill) = EnemySteeringBehavior.Seek(transform, target);
@@ -74,7 +68,7 @@ public class FastEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
         Vector3 direct = direction * time * speed;
         transform.position += direct;
 
-        if (direct != Vector3.zero)
+        if (direct.sqrMagnitude > 0.0001f)
         {
             transform.rotation = Quaternion.LookRotation(direct);
         }

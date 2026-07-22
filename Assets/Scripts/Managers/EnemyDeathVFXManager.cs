@@ -4,11 +4,15 @@ public class EnemyDeathVFXManager
 {
     private readonly ParticleSystem particleSystem;
     private readonly int burstCount;
+    private float minSpeed;
+    private float maxSpeed;
 
-    public EnemyDeathVFXManager(ParticleSystem particleSystem, int burstCount = 20)
+    public EnemyDeathVFXManager(ParticleSystem particleSystem, int burstCount = 20, float minSpeed = 2f, float maxSpeed = 6f)
     {
         this.particleSystem = particleSystem;
         this.burstCount = burstCount;
+        this.minSpeed = minSpeed;
+        this.maxSpeed = maxSpeed;
 
         var main = particleSystem.main;
         main.playOnAwake = false;
@@ -20,18 +24,21 @@ public class EnemyDeathVFXManager
         ServiceLocator.Register(this);
     }
 
-    public void PlayAt(Vector3 position)
-    {
-        PlayAt(position, Color.white);
-    }
-
     public void PlayAt(Vector3 position, Color color)
     {
-        var emitParams = new ParticleSystem.EmitParams
+        for (int i = 0; i < burstCount; i++) 
         {
-            position = position,
-            startColor = color
-        };
-        particleSystem.Emit(emitParams, burstCount);
+            Vector3 randomDirection = Random.onUnitSphere;
+            float speed = Random.Range(minSpeed, maxSpeed);
+
+            var emitParams = new ParticleSystem.EmitParams
+            {
+                position = position,
+                startColor = color,
+                velocity = randomDirection * speed,
+                applyShapeToPosition = true
+            };
+            particleSystem.Emit(emitParams, 1);
+        }
     }
 }

@@ -2,7 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using System;
 
-public class HeavyEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
+public class HeavyEnemyBehavior : IEnemyBehavior, IUpdateable
 {
     private const int MAX_HITS = 5;
 
@@ -37,20 +37,16 @@ public class HeavyEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
         entity.GameObject().SetActive(true);
 
         UpdateManager.Instance.Register((IUpdateable)this);
-        UpdateManager.Instance.Register((IFixedUpdateables)this);
+    }
+
+    public void Destroy()
+    {
     }
 
     public void Deactivate()
     {
-        UpdateManager.Instance.Unregister((IFixedUpdateables)this);
         UpdateManager.Instance.Unregister((IUpdateable)this);
-
         entity.GameObject().SetActive(false);
-    }
-
-    public void CustomFixedUpdate()
-    {
-
     }
 
     public void TakeDamage()
@@ -70,8 +66,7 @@ public class HeavyEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
         Vector3 direct = direction * time * speed;
         transform.position += direct;
 
-        // Evita el error de Unity al pedirle rotacion a un vector cero
-        if (direct != Vector3.zero)
+        if (direct.sqrMagnitude > 0.0001f)
         {
             transform.rotation = Quaternion.LookRotation(direct);
         }

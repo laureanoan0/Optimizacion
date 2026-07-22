@@ -28,8 +28,6 @@ public class PlayerAttackController: IUpdateable
     {
         if (Input.GetMouseButtonDown(0))
         {
-
-
             Vector3 startPos = playerTransform.position + playerTransform.right * rightOffset + playerTransform.up * upOffset;
             Vector3 direcction = playerTransform.forward;
 

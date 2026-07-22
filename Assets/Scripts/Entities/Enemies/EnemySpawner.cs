@@ -35,10 +35,6 @@ public class EnemySpawner //Controla las pools
             {
                 implemented.Add(so);
             }
-            else
-            {
-                Debug.LogWarning($"EnemySpawner: el tipo '{so.type}' ({so.name}) todavía no tiene comportamiento implementado, se omite del spawn.");
-            }
         }
         enemiesArray = implemented.ToArray();
 
@@ -66,10 +62,14 @@ public class EnemySpawner //Controla las pools
             createFunc: () => CreateEnemyInstance(data, pool),
             actionOnGet: enemy => enemy.Activate(transform.position),
             actionOnRelease: enemy => enemy.Deactivate(),
-            actionOnDestroy: enemy => UnityEngine.Object.Destroy(enemy.GameObjectRef.GameObject()),
+            actionOnDestroy: enemy => 
+            { 
+                enemy.Destroy();
+                UnityEngine.Object.Destroy(enemy.GameObjectRef.GameObject());
+            },
             collectionCheck: false,
             defaultCapacity: prewarmCount,
-            maxSize: 30);
+            maxSize: prewarmCount * 2);
 
         var warmBatch = new List<IEnemyBehavior>(prewarmCount);
         for (int i = 0; i < prewarmCount; i++)
@@ -85,6 +85,7 @@ public class EnemySpawner //Controla las pools
     }
     private IEnemyBehavior CreateEnemyInstance(EnemySO data, ObjectPool<IEnemyBehavior> pool)
     {
+
         UnityEngine.Object entity = GameManager.CreateObject(data.prefab, transform.position);
         IEnemyBehavior enemy = EnemyFactory.CreateEnemy(data.type, entity, target, data);
 

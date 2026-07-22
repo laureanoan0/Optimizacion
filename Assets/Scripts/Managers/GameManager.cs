@@ -9,8 +9,6 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private EnemySpawnersSO enemySO;
     [SerializeField] private PlayerSO playerSO;
-    [SerializeField] private Transform playerTransform;
-    [SerializeField] private Transform orientation;
     [SerializeField] private ParticleSystem enemyDeathParticles;
 
     private EntityManager entityManager;

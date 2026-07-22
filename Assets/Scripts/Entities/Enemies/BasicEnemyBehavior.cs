@@ -2,7 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using System;
 
-public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
+public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable
 {
     private UnityEngine.Object entity;
     private Transform transform;
@@ -32,20 +32,16 @@ public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
         entity.GameObject().SetActive(true);
 
         UpdateManager.Instance.Register((IUpdateable)this);
-        UpdateManager.Instance.Register((IFixedUpdateables)this);
+    }
+
+    public void Destroy()
+    {
     }
 
     public void Deactivate()
     {
-        UpdateManager.Instance.Unregister((IFixedUpdateables)this);
         UpdateManager.Instance.Unregister((IUpdateable)this);
-
         entity.GameObject().SetActive(false);
-    }
-
-    public void CustomFixedUpdate()
-    {
-
     }
 
     public void TakeDamage()
@@ -59,7 +55,10 @@ public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
 
         Vector3 direct = direction * time * speed;
         transform.position += direct;
-        transform.rotation = Quaternion.LookRotation(direct);
+        if (direct.sqrMagnitude > 0.0001f)
+        {
+            transform.rotation = Quaternion.LookRotation(direct);
+        }
     }
 
     public void Reset()

@@ -16,7 +16,6 @@ public static class ServiceLocator
             return;
         }
         services.Add(type, service);
-        Debug.Log("Recibi un servicio del tipo: " + type);
     }
 
     public static T Get<T>()

@@ -70,6 +70,10 @@ public class HeavyEnemyBehavior : IEnemyBehavior, IUpdateable
         {
             transform.rotation = Quaternion.LookRotation(direct);
         }
+        if (kill)
+        {
+            GameManager.LoadMainMenuScene();
+        }
     }
 
     public void Reset()

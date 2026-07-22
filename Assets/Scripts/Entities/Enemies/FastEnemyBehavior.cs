@@ -72,6 +72,10 @@ public class FastEnemyBehavior : IEnemyBehavior, IUpdateable
         {
             transform.rotation = Quaternion.LookRotation(direct);
         }
+        if (kill)
+        {
+            GameManager.LoadMainMenuScene();
+        }
     }
 
     private bool IsSeenByPlayer()

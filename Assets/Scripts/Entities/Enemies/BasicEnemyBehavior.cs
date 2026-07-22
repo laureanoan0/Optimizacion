@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable
 {
@@ -58,6 +59,10 @@ public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable
         if (direct.sqrMagnitude > 0.0001f)
         {
             transform.rotation = Quaternion.LookRotation(direct);
+        }
+        if (kill)
+        {
+            GameManager.LoadMainMenuScene();
         }
     }
 

@@ -42,7 +42,9 @@ public class GameManager : MonoBehaviour
     }
     public static void LoadMainMenuScene()
     {
-        SceneManager.LoadScene("MainMenu");
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        SceneManager.LoadScene("MainMenuScene");
     }
 }
 

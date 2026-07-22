@@ -15,12 +15,6 @@ public class PlayerBehavior: IUpdateable, IFixedUpdateables
         UpdateManager.Instance.Register((IUpdateable)this);
         UpdateManager.Instance.Register((IFixedUpdateables)this);
     }
-
-    public void Die()
-    {
-        Destroy();
-        GameManager.LoadMainMenuScene();
-    }
     public void Destroy()
     {
         UpdateManager.Instance.Unregister((IUpdateable)this);

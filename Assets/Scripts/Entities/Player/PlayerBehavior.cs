@@ -19,7 +19,7 @@ public class PlayerBehavior: IUpdateable, IFixedUpdateables
     public void Die()
     {
         Destroy();
-        GameManager.LoadGameplayScene();
+        GameManager.LoadMainMenuScene();
     }
     public void Destroy()
     {

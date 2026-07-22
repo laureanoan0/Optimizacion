@@ -40,5 +40,9 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene("SampleScene");
     }
+    public static void LoadMainMenuScene()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
 }
 

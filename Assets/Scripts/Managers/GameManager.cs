@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[DefaultExecutionOrder(-50)]
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private EnemySpawnersSO enemySO;

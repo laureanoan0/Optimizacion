@@ -14,6 +14,8 @@ public class EntityManager
     private void Boot(EnemySpawnersSO spawnerSo, PlayerSO playerSo, PlayerStatsSO stats)
     {
         ServiceLocator.Register(new Dictionary<UnityEngine.Object, IEnemyBehavior>());
+        new ScoreManager();
+
         SpawnEnemySpawners(spawnerSo, SpawnPlayer(playerSo, stats));
     }
     private void SpawnEnemySpawners(EnemySpawnersSO spawnerSo, Transform target)

@@ -14,9 +14,12 @@ public class EnemySpawner //Controla las pools
     public Dictionary<UnityEngine.Object, IEnemyBehavior> Enemies => enemies;
     public bool HasEnemyTypes => enemiesArray.Length > 0;
 
+    private ScoreManager scoreManager;
+
     public EnemySpawner(Transform transform, EnemySO[] enemySo, Transform target)
     {
         enemies = ServiceLocator.Get<Dictionary<UnityEngine.Object, IEnemyBehavior>>();
+        scoreManager = ServiceLocator.Get<ScoreManager>();
 
         this.transform = transform;
         this.target = target;
@@ -83,6 +86,7 @@ public class EnemySpawner //Controla las pools
 
         enemy.OnDeath += behavior =>
         {
+            scoreManager.AddScore(behavior.Difficulty);
             behavior.Reset();
             pool.Release(behavior);
         };

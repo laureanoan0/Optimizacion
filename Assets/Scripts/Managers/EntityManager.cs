@@ -37,8 +37,8 @@ public class EntityManager
 
     private Transform SpawnPlayer(PlayerSO playerSo, PlayerStatsSO stats)
     {
-        (Rigidbody, Object) playerObj = GameManager.CreatePlayer(playerSo.playerRb, playerSo.empty);
-        PlayerBehavior playerBehavior = new PlayerBehavior(playerObj.Item2.GameObject().transform, playerObj.Item1.GameObject().transform, playerObj.Item1, stats, stats.entityLayer);
+        (Rigidbody, Object, LineRenderer) playerObj = GameManager.CreatePlayer(playerSo.playerRb, playerSo.empty, playerSo.lineRenderer);
+        PlayerBehavior playerBehavior = new PlayerBehavior(playerObj.Item2.GameObject().transform, playerObj.Item1.GameObject().transform, playerObj.Item1, stats, stats.entityLayer, playerSo.lineRenderer);
         player.Item1 = playerObj.Item1;
         player.Item2 = playerBehavior;
 

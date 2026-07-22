@@ -5,12 +5,17 @@ public class PlayerAttackController: IUpdateable
 {
     private Transform playerTransform;
     private LayerMask entityLayer;
+    private float shootDistance = 1000f;
+    private LineRendererPool lineRendPool;
 
-    public PlayerAttackController(Transform playerTransform, LayerMask entityLayer)
+    float rightOffset = 0.5f;
+    float upOffset = 0f;
+
+    public PlayerAttackController(Transform playerTransform, LayerMask entityLayer, LineRenderer lineRend)
     {
         this.playerTransform = playerTransform;
         this.entityLayer = entityLayer;
-
+        lineRendPool = new LineRendererPool(lineRend);
         UpdateManager.Instance.Register(this);
     }
 
@@ -21,12 +26,21 @@ public class PlayerAttackController: IUpdateable
 
     public void CustomUpdate(float time)
     {
-        Debug.DrawRay(playerTransform.position, playerTransform.forward * 1000f);
         if (Input.GetMouseButtonDown(0))
         {
-            RaycastHit hit;
 
-            if (Physics.Raycast(playerTransform.position, playerTransform.forward, out hit, 1000f, entityLayer))
+
+            Vector3 startPos = playerTransform.position + playerTransform.right * rightOffset + playerTransform.up * upOffset;
+            Vector3 direcction = playerTransform.forward;
+
+            RaycastHit hit;
+            bool didHit = Physics.Raycast(playerTransform.position, playerTransform.forward, out hit, shootDistance, entityLayer);
+
+            Vector3 endPoint = didHit ? hit.point : startPos + direcction * (shootDistance / 4);
+            
+            lineRendPool.Shoot(startPos, endPoint);
+
+            if (didHit)
             {
                 if (ServiceLocator.Get<Dictionary<UnityEngine.Object, IEnemyBehavior>>().TryGetValue(hit.collider.gameObject, out var enemyRef))
                 {

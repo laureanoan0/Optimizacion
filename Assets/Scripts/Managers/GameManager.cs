@@ -30,11 +30,11 @@ public class GameManager : MonoBehaviour
         return Instantiate(enemy, position, new Quaternion(0,0,0,0));
     }
 
-    public static (Rigidbody, UnityEngine.Object) CreatePlayer(Rigidbody rbPrefab, UnityEngine.Object orientation)
+    public static (Rigidbody, UnityEngine.Object, LineRenderer) CreatePlayer(Rigidbody rbPrefab, UnityEngine.Object orientation, LineRenderer lineRend)
     {
         Rigidbody rbInstance = Instantiate(rbPrefab);
         UnityEngine.Object empty = Instantiate(orientation, rbInstance.transform);
-        return (rbInstance, empty);
+        return (rbInstance, empty, lineRend);
     }
 
     public static void LoadGameplayScene()

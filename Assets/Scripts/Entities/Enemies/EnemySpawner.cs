@@ -5,7 +5,7 @@ using UnityEngine.Pool;
 
 public class EnemySpawner //Controla las pools
 {
-    private const int PREWARM_COUNT = 5;
+    private const int PREWARM_COUNT = 50;
     private Transform transform;
     private EnemySO[] enemiesArray;
     private Transform target;

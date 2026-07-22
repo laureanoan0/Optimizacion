@@ -6,15 +6,16 @@ public class EntityManager
 {
     private (Object, PlayerBehavior) player;
 
-    public EntityManager(EnemySpawnersSO spawnersSo, PlayerSO playerSO)
+    public EntityManager(EnemySpawnersSO spawnersSo, PlayerSO playerSO, ParticleSystem enemyDeathParticles)
     {
-        Boot(spawnersSo, playerSO, playerSO.statsSO);
+        Boot(spawnersSo, playerSO, playerSO.statsSO, enemyDeathParticles);
     }
 
-    private void Boot(EnemySpawnersSO spawnerSo, PlayerSO playerSo, PlayerStatsSO stats)
+    private void Boot(EnemySpawnersSO spawnerSo, PlayerSO playerSo, PlayerStatsSO stats, ParticleSystem enemyDeathParticles)
     {
         ServiceLocator.Register(new Dictionary<UnityEngine.Object, IEnemyBehavior>());
         new ScoreManager();
+        new EnemyDeathVFXManager(enemyDeathParticles);
 
         SpawnEnemySpawners(spawnerSo, SpawnPlayer(playerSo, stats));
     }

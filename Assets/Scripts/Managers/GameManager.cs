@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerSO playerSO;
     [SerializeField] private Transform playerTransform;
     [SerializeField] private Transform orientation;
+    [SerializeField] private ParticleSystem enemyDeathParticles;
 
     private EntityManager entityManager;
 
@@ -21,7 +22,7 @@ public class GameManager : MonoBehaviour
     }
     public void ServicesRegistration()
     {
-        entityManager = new EntityManager(enemySO, playerSO);
+        entityManager = new EntityManager(enemySO, playerSO, enemyDeathParticles);
         //ServiceLocator.Register(entityManager.Enemies);
     }
 

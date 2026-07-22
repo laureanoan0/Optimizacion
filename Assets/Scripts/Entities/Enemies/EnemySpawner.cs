@@ -2,6 +2,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
+using UnityEngine.VFX;
 
 public class EnemySpawner //Controla las pools
 {
@@ -15,11 +16,14 @@ public class EnemySpawner //Controla las pools
     public bool HasEnemyTypes => enemiesArray.Length > 0;
 
     private ScoreManager scoreManager;
+    private EnemyDeathVFXManager vfxManager;
 
     public EnemySpawner(Transform transform, EnemySO[] enemySo, Transform target)
     {
         enemies = ServiceLocator.Get<Dictionary<UnityEngine.Object, IEnemyBehavior>>();
         scoreManager = ServiceLocator.Get<ScoreManager>();
+        vfxManager = ServiceLocator.Get<EnemyDeathVFXManager>();
+        
 
         this.transform = transform;
         this.target = target;
@@ -86,7 +90,11 @@ public class EnemySpawner //Controla las pools
 
         enemy.OnDeath += behavior =>
         {
+            Vector3 deathPosition = behavior.GameObjectRef.GameObject().transform.position;
+
             scoreManager.AddScore(behavior.Difficulty);
+            vfxManager.PlayAt(deathPosition, data.vfxColor);
+
             behavior.Reset();
             pool.Release(behavior);
         };

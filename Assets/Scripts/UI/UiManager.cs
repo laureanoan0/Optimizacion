@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public enum Scenes { MainMenu, GameplayScene, FinalScreen }
 
@@ -12,7 +13,10 @@ public class UiManager : MonoBehaviour
 
     [Header("Gameplay Scene")]
     [SerializeField] private TMP_Text scoreText;
-    [SerializeField] private string prefix = "Score: ";
+    [SerializeField] private CanvasGroup waveText;
+    [SerializeField] private TMP_Text waveNumber;
+    [SerializeField] private string scorePrefix = "Score: ";
+    [SerializeField] private string wavePrefix = "Wave ";
 
     [Header("Main Menu Scene")]
     [SerializeField] private Button playButton;
@@ -25,6 +29,7 @@ public class UiManager : MonoBehaviour
     [SerializeField] private string menuSceneName = "MainMenuScene";
 
     private ScoreManager scoreManager;
+    private WaveManager waveManager;
 
     private void Awake()
     {
@@ -45,20 +50,23 @@ public class UiManager : MonoBehaviour
     private void InitializeScoreDisplay()
     {
         scoreManager = ServiceLocator.Get<ScoreManager>();
+        waveManager = ServiceLocator.Get<WaveManager>();
+
+        waveManager.OnWaveFinished += ShowWaveChanged;
         scoreManager.OnScoreChanged += UpdateScoreText;
         UpdateScoreText(scoreManager.Score);
     }
 
     private void InitializeMainMenu()
     {
-        Debug.Log("HOLA - estoy en MainMenu");
+        ServiceLocator.Clear();
         playButton.onClick.AddListener(OnPlayClicked);
         quitButton.onClick.AddListener(OnQuitClicked);
     }
 
     private void InitializeFinalScreen()
     {
-        Debug.Log("HOLA - estoy en FinalScreen");
+        ServiceLocator.Clear();
         replayButton.onClick.AddListener(OnPlayClicked);
         mainMenuButton.onClick.AddListener(OnMenuClicked);
     }
@@ -87,11 +95,35 @@ public class UiManager : MonoBehaviour
         if (scoreManager != null)
         {
             scoreManager.OnScoreChanged -= UpdateScoreText;
+            waveManager.OnWaveFinished -= ShowWaveChanged;
         }
     }
 
     private void UpdateScoreText(int newScore)
     {
-        scoreText.text = prefix + newScore;
+        scoreText.text = scorePrefix + newScore;
+    }
+
+    private void ShowWaveChanged(int waveNumber)
+    {
+        StopAllCoroutines();
+        this.waveNumber.text = wavePrefix + waveNumber;
+        waveText.alpha = 1f;
+        StartCoroutine(FadeText(waveText, 1.5f));
+    }
+
+    private IEnumerator FadeText(CanvasGroup text, float duration)
+    {
+        float startTime = Time.time;
+        float endTime = Time.time + duration;
+
+        while (Time.time < endTime)
+        {
+            float elapsedTime = Time.time - startTime;
+            float t = elapsedTime / duration;
+            text.alpha = Mathf.Lerp(1f, 0f, t);
+            yield return null;
+        }
+        text.alpha = 0f;    
     }
 }

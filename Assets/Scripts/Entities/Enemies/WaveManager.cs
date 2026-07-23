@@ -1,15 +1,25 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+
 
 public class WaveManager : IUpdateable
 {
     private readonly List<EnemySpawner> spawnPoints;
     private readonly float waveInterval;
+    private readonly float spawnDelay = 0.5f;
 
-    private int waveSize;
+    private float waveSize;
+    private int waveNumber;
     private float timer;
+    private bool isSpawning;
+    private int enemiesSpawnedThisWave;
+    private float spawnTimer;
+    private List<EnemySpawner> currentValidSpawnPoints;
 
-    public WaveManager(List<EnemySpawner> spawnPoints, float waveInterval, int initialWaveSize)
+    public event Action<int> OnWaveFinished;
+
+    public WaveManager(List<EnemySpawner> spawnPoints, float waveInterval, float initialWaveSize)
     {
         this.spawnPoints = spawnPoints;
         this.waveInterval = waveInterval;
@@ -17,31 +27,55 @@ public class WaveManager : IUpdateable
 
         timer = waveInterval;
         UpdateManager.Instance.Register(this);
+        ServiceLocator.Register(this);
 
-        SpawnWave();
+        waveNumber = 1;
+
+        StartWave();
     }
 
     public void CustomUpdate(float time)
     {
+        if (isSpawning)
+        {
+            HandleSpawning(time);
+            return;
+        }
+
         timer -= time;
         if (timer <= 0)
         {
-            SpawnWave();
+            StartWave();
             timer = waveInterval;
         }
     }
 
-    private void SpawnWave()
+    private void StartWave()
     {
-        var validSpawnPoints = spawnPoints.FindAll(s => s.HasEnemyTypes);
-        if (validSpawnPoints.Count == 0) return; 
+        currentValidSpawnPoints = spawnPoints.FindAll(s => s.HasEnemyTypes && !s.EnemiesAlive);
+        if (currentValidSpawnPoints.Count != 4) return;
 
-        for (int i = 0; i < waveSize; i++)
+        OnWaveFinished?.Invoke(waveNumber++);
+        enemiesSpawnedThisWave = 0;
+        spawnTimer = 0;
+        isSpawning = true;
+    }
+
+    private void HandleSpawning(float time)
+    {
+        spawnTimer -= time;
+        if (spawnTimer <= 0)
         {
-            EnemySpawner spawner = validSpawnPoints[Random.Range(0, validSpawnPoints.Count)];
+            EnemySpawner spawner = currentValidSpawnPoints[UnityEngine.Random.Range(0, currentValidSpawnPoints.Count)];
             spawner.SpawnOne();
-        }
+            enemiesSpawnedThisWave++;
+            spawnTimer = spawnDelay;
 
-        waveSize++;
+            if (enemiesSpawnedThisWave >= waveSize)
+            {
+                isSpawning = false;
+                Mathf.Floor(waveSize *= 1.5f);
+            }
+        }
     }
 }

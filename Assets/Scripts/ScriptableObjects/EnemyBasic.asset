@@ -14,5 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 6028170393952986060, guid: a9914cf646305e44fb83e1d115733b77, type: 3}
   type: 0
-  speed: 8
-  vfxColor: {r: 1, g: 1, b: 1, a: 1}
+  speed: 12

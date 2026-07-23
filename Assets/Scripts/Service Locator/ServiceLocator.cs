@@ -51,4 +51,9 @@ public static class ServiceLocator
             services.Remove(type);
         }
     }
+
+    public static void Clear()
+    {
+        services = new Dictionary<Type, object>();
+    }
 }

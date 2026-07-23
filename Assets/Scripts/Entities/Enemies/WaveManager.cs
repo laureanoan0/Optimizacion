@@ -17,7 +17,7 @@ public class WaveManager : IUpdateable
     private bool isSpawning;
     private int enemiesSpawnedThisWave;
     private float spawnTimer;
-    private List<EnemySpawner> currentValidSpawnPoints;
+    private readonly List<EnemySpawner> currentValidSpawnPoints = new List<EnemySpawner>();
 
 
     public event Action<int> OnWaveFinished;
@@ -42,26 +42,29 @@ public class WaveManager : IUpdateable
 
     public void CustomUpdate(float time)
     {
-        if (isSpawning)
         {
-            HandleSpawning(time);
-            return;
-        }
+            if (isSpawning)
+            {
+                HandleSpawning(time);
+                return;
+            }
 
-        timer -= time;
-        if (timer <= 0)
-        {
-            StartWave();
-            timer = waveInterval;
+            timer -= time;
+            if (timer <= 0)
+            {
+                StartWave();
+                timer = waveInterval;
+            }
         }
     }
 
     private void StartWave()
     {
-        currentValidSpawnPoints = spawnPoints.FindAll(s => s.HasEnemyTypes && !s.EnemiesAlive);
+        RefreshValidSpawnPoints();
+
         if (currentValidSpawnPoints.Count != 4) return;
 
-        if ( waveNumber > maxWaves)
+        if (waveNumber > maxWaves)
         {
             OnGameWon?.Invoke();
             return;
@@ -71,6 +74,19 @@ public class WaveManager : IUpdateable
         enemiesSpawnedThisWave = 0;
         spawnTimer = 0;
         isSpawning = true;
+    }
+    private void RefreshValidSpawnPoints()
+    {
+        currentValidSpawnPoints.Clear();
+
+        for (int i = 0; i < spawnPoints.Count; i++)
+        {
+            EnemySpawner spawner = spawnPoints[i];
+            if (spawner.HasEnemyTypes && !spawner.EnemiesAlive)
+            {
+                currentValidSpawnPoints.Add(spawner);
+            }
+        }
     }
 
     private void HandleSpawning(float time)
@@ -86,7 +102,7 @@ public class WaveManager : IUpdateable
             if (enemiesSpawnedThisWave >= waveSize)
             {
                 isSpawning = false;
-                Mathf.Floor(waveSize *= 1.5f);
+                waveSize = Mathf.Floor(waveSize * 1.5f);
             }
         }
     }

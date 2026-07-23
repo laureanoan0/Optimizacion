@@ -94,7 +94,7 @@ public class EnemySpawner //Controla las pools
             Vector3 deathPosition = behavior.GameObjectRef.GameObject().transform.position;
 
             scoreManager.AddScore(behavior.Difficulty);
-            vfxManager.PlayAt(deathPosition, data.vfxColor);
+            vfxManager.PlayAt(deathPosition);
 
             behavior.Reset();
             pool.Release(behavior);

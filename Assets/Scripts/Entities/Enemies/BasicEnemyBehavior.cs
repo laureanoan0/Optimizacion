@@ -62,7 +62,7 @@ public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable
         }
         if (kill)
         {
-            GameManager.LoadMainMenuScene();
+            GameManager.LoadFinalScene();
         }
     }
 

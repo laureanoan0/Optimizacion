@@ -38,13 +38,19 @@ public class GameManager : MonoBehaviour
 
     public static void LoadGameplayScene()
     {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("GameplayScene");
     }
     public static void LoadMainMenuScene()
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         SceneManager.LoadScene("MainMenuScene");
+    }
+    public static void LoadFinalScene()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        SceneManager.LoadScene("FinalScreen");
     }
 }
 

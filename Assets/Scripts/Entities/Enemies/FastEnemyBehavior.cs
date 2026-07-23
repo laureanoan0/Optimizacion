@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class FastEnemyBehavior : IEnemyBehavior, IUpdateable
+public class FastEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
 {
     private const float VIEW_HALF_ANGLE = 60f;
 
@@ -17,6 +17,7 @@ public class FastEnemyBehavior : IEnemyBehavior, IUpdateable
     private float speed;
     private EnemyTypes enemyType = EnemyTypes.fast;
     private int difficulty = 2;
+    private bool seen = false;
 
     public int Difficulty => difficulty;
     public EnemyTypes Type => enemyType;
@@ -40,11 +41,13 @@ public class FastEnemyBehavior : IEnemyBehavior, IUpdateable
         entity.GameObject().SetActive(true);
 
         UpdateManager.Instance.Register((IUpdateable)this);
+        UpdateManager.Instance.Register((IFixedUpdateables)this);
     }
 
     public void Deactivate()
     {
         UpdateManager.Instance.Unregister((IUpdateable)this);
+        UpdateManager.Instance.Unregister((IFixedUpdateables)this);
         entity.GameObject().SetActive(false);
     }
     public void Destroy()
@@ -58,7 +61,7 @@ public class FastEnemyBehavior : IEnemyBehavior, IUpdateable
 
     public void CustomUpdate(float time)
     {
-        if (IsSeenByPlayer())
+        if (seen)
         {
             return; 
         }
@@ -74,8 +77,12 @@ public class FastEnemyBehavior : IEnemyBehavior, IUpdateable
         }
         if (kill)
         {
-            GameManager.LoadMainMenuScene();
+            GameManager.LoadFinalScene();
         }
+    }
+    public void CustomFixedUpdate()
+    {
+        seen = IsSeenByPlayer();
     }
 
     private bool IsSeenByPlayer()

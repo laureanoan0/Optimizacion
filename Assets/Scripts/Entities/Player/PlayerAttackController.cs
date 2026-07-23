@@ -34,7 +34,7 @@ public class PlayerAttackController: IUpdateable
             RaycastHit hit;
             bool didHit = Physics.Raycast(playerTransform.position, playerTransform.forward, out hit, shootDistance, entityLayer);
 
-            Vector3 endPoint = didHit ? hit.point : startPos + direcction * (shootDistance / 4);
+            Vector3 endPoint = didHit ? hit.point : startPos + direcction * (shootDistance / 3);
             
             lineRendPool.Shoot(startPos, endPoint);
 

@@ -26424,12 +26424,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7136224e203443047af2f90ab8523268, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isMainMenuScene: 0
+  CurrentScene: 1
   scoreText: {fileID: 354709562}
   prefix: 'Score: '
   playButton: {fileID: 0}
   quitButton: {fileID: 0}
   gameplaySceneName: SampleScene
+  replayButton: {fileID: 0}
+  mainMenuButton: {fileID: 0}
+  menuSceneName: MainMenuScene
 --- !u!4 &943867520
 Transform:
   m_ObjectHideFlags: 0

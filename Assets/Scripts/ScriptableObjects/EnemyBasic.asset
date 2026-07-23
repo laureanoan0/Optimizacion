@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c3b4795b8751c39409fc36787587c4a0, type: 3}
-  m_Name: EnemyTest
+  m_Name: EnemyBasic
   m_EditorClassIdentifier: 
   prefab: {fileID: 6028170393952986060, guid: a9914cf646305e44fb83e1d115733b77, type: 3}
   type: 0
   speed: 8
+  vfxColor: {r: 1, g: 1, b: 1, a: 1}

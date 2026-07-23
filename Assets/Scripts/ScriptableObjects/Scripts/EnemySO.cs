@@ -7,5 +7,4 @@ public class EnemySO : ScriptableObject
     public GameObject prefab;
     public EnemyTypes type;
     public float speed;
-    public Color vfxColor = Color.white;
 }

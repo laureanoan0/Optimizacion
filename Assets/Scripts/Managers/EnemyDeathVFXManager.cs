@@ -24,7 +24,7 @@ public class EnemyDeathVFXManager
         ServiceLocator.Register(this);
     }
 
-    public void PlayAt(Vector3 position, Color color)
+    public void PlayAt(Vector3 position)
     {
         for (int i = 0; i < burstCount; i++) 
         {
@@ -34,7 +34,6 @@ public class EnemyDeathVFXManager
             var emitParams = new ParticleSystem.EmitParams
             {
                 position = position,
-                startColor = color,
                 velocity = randomDirection * speed,
                 applyShapeToPosition = true
             };

@@ -32,7 +32,7 @@ public class EntityManager
             index++;
         }
 
-        const float waveInterval = 10f;
+        const float waveInterval = 5f;
         new WaveManager(spawnPoints, waveInterval, initialWaveSize: 4);
     }
 

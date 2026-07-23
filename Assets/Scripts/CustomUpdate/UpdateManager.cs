@@ -33,7 +33,7 @@ public class UpdateManager : MonoBehaviour
         #endregion
 
         QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = -1;
+        Application.targetFrameRate = 120;
     }
 
     #region Registros

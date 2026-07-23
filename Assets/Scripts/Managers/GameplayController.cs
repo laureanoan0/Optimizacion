@@ -60,7 +60,7 @@ public class GameplayController : MonoBehaviour
 
     public static UnityEngine.Object CreateObject(UnityEngine.Object enemy, Vector3 position)
     {
-        return Instantiate(enemy, position, new Quaternion(0, 0, 0, 0));
+        return Instantiate(enemy, position, new Quaternion(0, 0, 0, 1));
     }
 
     public static (Rigidbody, UnityEngine.Object, LineRenderer) CreatePlayer(Rigidbody rbPrefab, UnityEngine.Object orientation, LineRenderer lineRend)

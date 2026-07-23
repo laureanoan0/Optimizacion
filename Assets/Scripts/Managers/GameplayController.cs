@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,12 +13,30 @@ public class GameplayController : MonoBehaviour
     [SerializeField] private ParticleSystem enemyDeathParticles;
 
     private EntityManager entityManager;
+    private WaveManager waveManager;
 
 
     private void Awake()
     {
         ServicesRegistration();
+        waveManager = ServiceLocator.Get<WaveManager>();
+        waveManager.OnGameWon += HandleGameWon;
     }
+
+    private void OnDestroy()
+    {
+        if (waveManager != null)
+        {
+            waveManager.OnGameWon -= HandleGameWon;
+        }
+
+    }
+
+    private void HandleGameWon()
+    {
+        LoadFinalScene(true);
+    }
+
     public void ServicesRegistration()
     {
         entityManager = new EntityManager(enemySO, playerSO, enemyDeathParticles);
@@ -46,11 +65,13 @@ public class GameplayController : MonoBehaviour
         Cursor.visible = true;
         SceneManager.LoadScene("MainMenuScene");
     }
-    public static void LoadFinalScene()
+    public static void LoadFinalScene(bool playerWon)
     {
+        Debug.Log($"LoadFinalScene llamado con playerWon = {playerWon}");
         Cursor.lockState = CursorLockMode.None;
+        GameResult.PlayerWon = playerWon;
         Cursor.visible = true;
         SceneManager.LoadScene("FinalScreen");
     }
-}
 
+}

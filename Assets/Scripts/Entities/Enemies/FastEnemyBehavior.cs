@@ -77,7 +77,7 @@ public class FastEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
         }
         if (kill)
         {
-            GameplayController.LoadFinalScene();
+            GameplayController.LoadFinalScene(false);
         }
     }
     public void CustomFixedUpdate()

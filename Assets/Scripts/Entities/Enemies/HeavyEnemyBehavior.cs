@@ -72,7 +72,7 @@ public class HeavyEnemyBehavior : IEnemyBehavior, IUpdateable
         }
         if (kill)
         {
-            GameplayController.LoadFinalScene();
+            GameplayController.LoadFinalScene(false);
         }
     }
 

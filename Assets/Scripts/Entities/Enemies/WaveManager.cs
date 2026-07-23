@@ -9,6 +9,8 @@ public class WaveManager : IUpdateable
     private readonly float waveInterval;
     private readonly float spawnDelay = 0.5f;
 
+    private readonly float maxWaves;
+
     private float waveSize;
     private int waveNumber;
     private float timer;
@@ -17,12 +19,16 @@ public class WaveManager : IUpdateable
     private float spawnTimer;
     private List<EnemySpawner> currentValidSpawnPoints;
 
-    public event Action<int> OnWaveFinished;
 
-    public WaveManager(List<EnemySpawner> spawnPoints, float waveInterval, float initialWaveSize)
+    public event Action<int> OnWaveFinished;
+    public event Action OnGameWon;
+
+    public WaveManager(List<EnemySpawner> spawnPoints, float waveInterval, float initialWaveSize, int maxWaves = 2)
     {
         this.spawnPoints = spawnPoints;
         this.waveInterval = waveInterval;
+        this.maxWaves = maxWaves;
+
         waveSize = initialWaveSize;
 
         timer = waveInterval;
@@ -52,6 +58,11 @@ public class WaveManager : IUpdateable
 
     private void StartWave()
     {
+        if ( waveNumber > maxWaves)
+        {
+            OnGameWon?.Invoke();
+            return;
+        }
         currentValidSpawnPoints = spawnPoints.FindAll(s => s.HasEnemyTypes && !s.EnemiesAlive);
         if (currentValidSpawnPoints.Count != 4) return;
 

@@ -26,6 +26,9 @@ public class UiManager : MonoBehaviour
     [Header("Final Scene")]
     [SerializeField] private Button replayButton;
     [SerializeField] private Button mainMenuButton;
+    [SerializeField] private TMP_Text resultText;
+    [SerializeField] private string winMessage = "VICTORY";
+    [SerializeField] private string loseMessage = "DEFEAT";
     [SerializeField] private string menuSceneName = "MainMenuScene";
 
     private ScoreManager scoreManager;
@@ -69,6 +72,7 @@ public class UiManager : MonoBehaviour
         ServiceLocator.Clear();
         replayButton.onClick.AddListener(OnPlayClicked);
         mainMenuButton.onClick.AddListener(OnMenuClicked);
+        resultText.text = GameResult.PlayerWon ? winMessage : loseMessage;
     }
 
     private void OnQuitClicked()

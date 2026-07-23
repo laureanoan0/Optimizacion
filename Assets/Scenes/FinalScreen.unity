@@ -425,12 +425,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentScene: 2
   scoreText: {fileID: 0}
-  prefix: 'Score: '
+  waveText: {fileID: 0}
+  waveNumber: {fileID: 0}
+  scorePrefix: 'Score: '
+  wavePrefix: 'Wave '
   playButton: {fileID: 0}
   quitButton: {fileID: 0}
   gameplaySceneName: GameplayScene
   replayButton: {fileID: 1342755465}
   mainMenuButton: {fileID: 404721777}
+  resultText: {fileID: 1329045798}
+  winMessage: VICTORY
+  loseMessage: DEFEAT
   menuSceneName: MainMenuScene
 --- !u!4 &763398797
 Transform:

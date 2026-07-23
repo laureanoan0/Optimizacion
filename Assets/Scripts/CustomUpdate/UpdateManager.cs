@@ -6,21 +6,19 @@ public class UpdateManager : MonoBehaviour
     private static UpdateManager instance;
     public static UpdateManager Instance => instance;
 
-    private readonly List<IStarteable> starteablesList = new List<IStarteable>();
     private readonly List<IUpdateable> updateablesList = new List<IUpdateable>();
     private readonly List<IFixedUpdateables> fixedUpdateablesList = new List<IFixedUpdateables>();
-
  
-    private readonly List<IStarteable> starteablesToAdd = new List<IStarteable>();
-    private readonly List<IStarteable> starteablesToRemove = new List<IStarteable>();
     private readonly List<IUpdateable> updateablesToAdd = new List<IUpdateable>();
     private readonly List<IUpdateable> updateablesToRemove = new List<IUpdateable>();
     private readonly List<IFixedUpdateables> fixedUpdateablesToAdd = new List<IFixedUpdateables>();
     private readonly List<IFixedUpdateables> fixedUpdateablesToRemove = new List<IFixedUpdateables>();
 
-    private bool isStarting;
     private bool isUpdating;
     private bool isFixedUpdating;
+    private bool isPaused;
+    public bool IsPaused => isPaused;
+
     private void Awake()
     {
         #region Singleton
@@ -33,35 +31,12 @@ public class UpdateManager : MonoBehaviour
             Destroy(gameObject);
         }
         #endregion
+
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = -1;
     }
 
     #region Registros
-    public void Register(IStarteable starteable)
-    {
-        if (isStarting)
-        {
-            if (!starteablesToAdd.Contains(starteable))
-            {
-                starteablesToAdd.Add(starteable);
-            }
-            return;
-        }
-
-        if (!starteablesList.Contains(starteable))
-        {
-            starteablesList.Add(starteable);
-        }
-    }
-    public void Unregister(IStarteable starteable)
-    {
-        if (isStarting)
-        {
-            starteablesToRemove.Add(starteable);
-            return;
-        }
-
-        starteablesList.Remove(starteable);
-    }
 
     public void Register(IUpdateable updatable)
     {
@@ -118,20 +93,10 @@ public class UpdateManager : MonoBehaviour
     }
     #endregion
 
-    private void Start()
-    {
-        isStarting = true;
-        for (int i = 0; i < starteablesList.Count; i++)
-        {
-            starteablesList[i].CustomStart();
-        }
-        isStarting = false;
-
-        FlushStarteablesPending();
-    }
-
     void Update()
     {
+        if (isPaused) return;
+
         isUpdating = true;
         for (int i = 0; i < updateablesList.Count; i++)
         {
@@ -144,6 +109,8 @@ public class UpdateManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isPaused) return;
+
         isFixedUpdating = true;
         for (int i = 0; i < fixedUpdateablesList.Count; i++)
         {
@@ -154,30 +121,12 @@ public class UpdateManager : MonoBehaviour
         FlushFixedUpdateablesPending();
     }
 
-    #region Flush de pendientes
-    private void FlushStarteablesPending()
+    public void SetPaused(bool paused)
     {
-        if (starteablesToAdd.Count > 0)
-        {
-            foreach (var item in starteablesToAdd)
-            {
-                if (!starteablesList.Contains(item))
-                {
-                    starteablesList.Add(item);
-                }
-            }
-            starteablesToAdd.Clear();
-        }
-
-        if (starteablesToRemove.Count > 0)
-        {
-            foreach (var item in starteablesToRemove)
-            {
-                starteablesList.Remove(item);
-            }
-            starteablesToRemove.Clear();
-        }
+        isPaused = paused;
     }
+
+    #region Flush de pendientes
 
     private void FlushUpdateablesPending()
     {

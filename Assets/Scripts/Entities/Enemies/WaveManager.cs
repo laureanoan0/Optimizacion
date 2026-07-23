@@ -58,13 +58,14 @@ public class WaveManager : IUpdateable
 
     private void StartWave()
     {
+        currentValidSpawnPoints = spawnPoints.FindAll(s => s.HasEnemyTypes && !s.EnemiesAlive);
+        if (currentValidSpawnPoints.Count != 4) return;
+
         if ( waveNumber > maxWaves)
         {
             OnGameWon?.Invoke();
             return;
         }
-        currentValidSpawnPoints = spawnPoints.FindAll(s => s.HasEnemyTypes && !s.EnemiesAlive);
-        if (currentValidSpawnPoints.Count != 4) return;
 
         OnWaveFinished?.Invoke(waveNumber++);
         enemiesSpawnedThisWave = 0;

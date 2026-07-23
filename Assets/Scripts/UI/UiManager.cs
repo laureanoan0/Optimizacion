@@ -15,21 +15,21 @@ public class UiManager : MonoBehaviour
     [SerializeField] private TMP_Text scoreText;
     [SerializeField] private CanvasGroup waveText;
     [SerializeField] private TMP_Text waveNumber;
-    [SerializeField] private string scorePrefix = "Score: ";
-    [SerializeField] private string wavePrefix = "Wave ";
+    private string scorePrefix = "Score: ";
+    private string wavePrefix = "Wave ";
 
     [Header("Main Menu Scene")]
     [SerializeField] private Button playButton;
     [SerializeField] private Button quitButton;
-    [SerializeField] private string gameplaySceneName = "GameplayScene";
+    private string gameplaySceneName = "GameplayScene";
 
     [Header("Final Scene")]
     [SerializeField] private Button replayButton;
     [SerializeField] private Button mainMenuButton;
     [SerializeField] private TMP_Text resultText;
-    [SerializeField] private string winMessage = "VICTORY";
-    [SerializeField] private string loseMessage = "DEFEAT";
-    [SerializeField] private string menuSceneName = "MainMenuScene";
+    private string winMessage = "VICTORY";
+    private string loseMessage = "DEFEAT";
+    private string menuSceneName = "MainMenuScene";
 
     private ScoreManager scoreManager;
     private WaveManager waveManager;
@@ -48,6 +48,8 @@ public class UiManager : MonoBehaviour
         {
             InitializeFinalScreen();
         }
+
+        GameEvents.OnSceneExit += Cleanup;
     }
 
     private void InitializeScoreDisplay()
@@ -80,6 +82,7 @@ public class UiManager : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
+        Cleanup();
         Application.Quit();
 #endif
     }
@@ -94,13 +97,15 @@ public class UiManager : MonoBehaviour
         SceneManager.LoadScene(menuSceneName);
     }
 
-    private void OnDisable()
+    private void Cleanup()
     {
         if (scoreManager != null)
         {
             scoreManager.OnScoreChanged -= UpdateScoreText;
             waveManager.OnWaveFinished -= ShowWaveChanged;
         }
+
+        GameEvents.OnSceneExit -= Cleanup;
     }
 
     private void UpdateScoreText(int newScore)
@@ -128,6 +133,6 @@ public class UiManager : MonoBehaviour
             text.alpha = Mathf.Lerp(1f, 0f, t);
             yield return null;
         }
-        text.alpha = 0f;    
+        text.alpha = 0f;
     }
 }

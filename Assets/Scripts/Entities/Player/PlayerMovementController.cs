@@ -21,7 +21,7 @@ public class PlayerMovementController
     private float hInput;
     private float vInput;
     private Vector3 moveDirection;
-
+    private GameplayController controllerRef;
     private Rigidbody rb;
     public PlayerMovementController(Transform orientation, Transform playerTransform, Rigidbody rb, PlayerStatsSO stats)
     {
@@ -37,6 +37,8 @@ public class PlayerMovementController
         airMult = stats.airMult;
         playerHeight = stats.playerHeight;
         groundLayer = stats.groundLayer;
+
+        controllerRef = ServiceLocator.Get<GameplayController>();
     }
 
     public void CustomUpdate(float time)
@@ -72,6 +74,10 @@ public class PlayerMovementController
             canJump = false;
             Jump();
             ResetJump(jumpCd);
+        }
+        if (Input.GetKey(KeyCode.P))
+        {
+            controllerRef.PauseGame();
         }
     }
 

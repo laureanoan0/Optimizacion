@@ -33,10 +33,33 @@ public class WaveManager : IUpdateable
 
     private void SpawnWave()
     {
+<<<<<<< Updated upstream
         var validSpawnPoints = spawnPoints.FindAll(s => s.HasEnemyTypes);
         if (validSpawnPoints.Count == 0) return; 
 
         for (int i = 0; i < waveSize; i++)
+=======
+        currentValidSpawnPoints = spawnPoints.FindAll(s => s.HasEnemyTypes && !s.EnemiesAlive);
+        if (currentValidSpawnPoints.Count != 4)
+            return;
+
+        if (waveNumber >= 3)
+        {
+            GameplayController.PlayerWon = true;
+            GameplayController.LoadFinalScene();
+            return;
+        }
+
+        OnWaveFinished?.Invoke(waveNumber++);
+        enemiesSpawnedThisWave = 0;
+        spawnTimer = 0;
+        isSpawning = true;
+    }
+    private void HandleSpawning(float time)
+    {
+        spawnTimer -= time;
+        if (spawnTimer <= 0)
+>>>>>>> Stashed changes
         {
             EnemySpawner spawner = validSpawnPoints[Random.Range(0, validSpawnPoints.Count)];
             spawner.SpawnOne();

@@ -2,15 +2,19 @@ using Unity.VisualScripting;
 using UnityEngine;
 using System;
 
-public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
+public class HeavyEnemyBehavior : IEnemyBehavior, IUpdateable
 {
+    private const int MAX_HITS = 5;
+
     private UnityEngine.Object entity;
     private Transform transform;
     private Transform target;
     private Vector3 originalPosition;
     private float speed;
-    private EnemyTypes enemyType = EnemyTypes.melee;
-    private int difficulty = 1;
+    private EnemyTypes enemyType = EnemyTypes.tank;
+    private int difficulty = 3;
+    private int currentHits;
+
     public int Difficulty => difficulty;
     public EnemyTypes Type => enemyType;
     public UnityEngine.Object GameObjectRef => entity;
@@ -24,6 +28,7 @@ public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
         originalPosition = transform.position;
         target = playerPos;
         speed = data.speed;
+        currentHits = 0;
     }
 
     public void Activate(Vector3 position)
@@ -32,25 +37,26 @@ public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
         entity.GameObject().SetActive(true);
 
         UpdateManager.Instance.Register((IUpdateable)this);
-        UpdateManager.Instance.Register((IFixedUpdateables)this);
+    }
+
+    public void Destroy()
+    {
     }
 
     public void Deactivate()
     {
-        UpdateManager.Instance.Unregister((IFixedUpdateables)this);
         UpdateManager.Instance.Unregister((IUpdateable)this);
-
         entity.GameObject().SetActive(false);
-    }
-
-    public void CustomFixedUpdate()
-    {
-
     }
 
     public void TakeDamage()
     {
-        OnDeath?.Invoke(this);
+        currentHits++;
+
+        if (currentHits >= MAX_HITS)
+        {
+            OnDeath?.Invoke(this);
+        }
     }
 
     public void CustomUpdate(float time)
@@ -59,9 +65,7 @@ public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
 
         Vector3 direct = direction * time * speed;
         transform.position += direct;
-<<<<<<< Updated upstream
-        transform.rotation = Quaternion.LookRotation(direct);
-=======
+
         if (direct.sqrMagnitude > 0.0001f)
         {
             transform.rotation = Quaternion.LookRotation(direct);
@@ -71,11 +75,11 @@ public class BasicEnemyBehavior : IEnemyBehavior, IUpdateable, IFixedUpdateables
             GameplayController.PlayerWon = false;
             GameplayController.LoadFinalScene();
         }
->>>>>>> Stashed changes
     }
 
     public void Reset()
     {
         transform.position = originalPosition;
+        currentHits = 0; // importante: si no lo reseteamos, al volver del pool nace "medio muerto"
     }
 }

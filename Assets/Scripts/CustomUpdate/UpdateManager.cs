@@ -21,7 +21,6 @@ public class UpdateManager : MonoBehaviour
     private bool isStarting;
     private bool isUpdating;
     private bool isFixedUpdating;
-
     private void Awake()
     {
         #region Singleton

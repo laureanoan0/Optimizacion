@@ -6,20 +6,14 @@ public class PlayerBehavior: IUpdateable, IFixedUpdateables
     private PlayerMovementController movementCon;
     private PlayerAttackController attackCon;
 
-    public PlayerBehavior(Transform orientation, Transform playerTransform, Rigidbody rb, PlayerStatsSO stats, LayerMask entityLayer)
+    public PlayerBehavior(Transform orientation, Transform playerTransform, Rigidbody rb, PlayerStatsSO stats, LayerMask entityLayer, LineRenderer lineRend)
     {
         camera = new CameraBehavior(playerTransform, orientation);
         movementCon = new PlayerMovementController(orientation, playerTransform, rb, stats);
-        attackCon = new PlayerAttackController(orientation, entityLayer);
+        attackCon = new PlayerAttackController(orientation, entityLayer, lineRend);
 
         UpdateManager.Instance.Register((IUpdateable)this);
         UpdateManager.Instance.Register((IFixedUpdateables)this);
-    }
-
-    public void Die()
-    {
-        Destroy();
-        GameManager.LoadGameplayScene();
     }
     public void Destroy()
     {

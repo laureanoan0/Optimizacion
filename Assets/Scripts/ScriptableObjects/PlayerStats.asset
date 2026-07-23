@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7a35a9817a2bb643aea85055945a0a1, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  moveSpeed: 1
-  groundDrag: 1
+  moveSpeed: 1.4
+  groundDrag: 0.5
   jumpForce: 7
   jumpCd: 0.5
-  airMult: 1.5
+  airMult: 1.1
   playerHeight: 2.5
   groundLayer:
     serializedVersion: 2

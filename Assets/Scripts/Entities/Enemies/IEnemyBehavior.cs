@@ -11,6 +11,7 @@ public interface IEnemyBehavior
     public void Init(UnityEngine.Object entity, Transform target, EnemySO data);
     public void Activate(Vector3 position);
     public void Deactivate();
+    public void Destroy();
     public void TakeDamage();
     public void Reset();
 }

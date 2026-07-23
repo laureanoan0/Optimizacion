@@ -26,7 +26,7 @@ public class EntityManager
         int index = 0;
         while (index <= 3)
         {
-            UnityEngine.Object spawnerObj = GameManager.CreateObject(spawnerSo.prefab, spawnerSo.position[index]);
+            UnityEngine.Object spawnerObj = GameplayController.CreateObject(spawnerSo.prefab, spawnerSo.position[index]);
             EnemySpawner spawnerBrain = new EnemySpawner(spawnerObj.GameObject().transform, spawnerSo.enemies, target);
             spawnPoints.Add(spawnerBrain);
             index++;
@@ -38,7 +38,7 @@ public class EntityManager
 
     private Transform SpawnPlayer(PlayerSO playerSo, PlayerStatsSO stats)
     {
-        (Rigidbody, Object, LineRenderer) playerObj = GameManager.CreatePlayer(playerSo.playerRb, playerSo.empty, playerSo.lineRenderer);
+        (Rigidbody, Object, LineRenderer) playerObj = GameplayController.CreatePlayer(playerSo.playerRb, playerSo.empty, playerSo.lineRenderer);
         PlayerBehavior playerBehavior = new PlayerBehavior(playerObj.Item2.GameObject().transform, playerObj.Item1.GameObject().transform, playerObj.Item1, stats, stats.entityLayer, playerSo.lineRenderer);
         player.Item1 = playerObj.Item1;
         player.Item2 = playerBehavior;

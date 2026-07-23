@@ -101,7 +101,7 @@ public class EnemySpawner //Controla las pools
     private IEnemyBehavior CreateEnemyInstance(EnemySO data, ObjectPool<IEnemyBehavior> pool)
     {
 
-        UnityEngine.Object entity = GameManager.CreateObject(data.prefab, transform.position);
+        UnityEngine.Object entity = GameplayController.CreateObject(data.prefab, transform.position);
         IEnemyBehavior enemy = EnemyFactory.CreateEnemy(data.type, entity, target, data);
 
         enemy.OnDeath += behavior =>
